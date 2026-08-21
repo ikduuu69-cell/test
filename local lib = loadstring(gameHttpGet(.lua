@@ -1,0 +1,87 @@
+local lib = loadstring(game:HttpGet("https://raw.githubusercontent.com/laagginq/ui-libraries/main/shit-lib/src.lua"))()
+local win = lib:Create("Dick slap","Slap Battles")
+
+-- tabs
+local mainmenu = win:tab("Main menu",true)
+local charactercat = win:tab("Character",false)
+local world = win:tab("World",false)
+local debug = win:tab("Debug shit",false)
+--
+
+local localplayer = game.Players.LocalPlayer
+local character = localplayer.Character
+local rootpart = character.HumanoidRootPart
+local RunService = game:GetService("RunService")
+
+-- Variables used in ui
+local antihit = false
+local slapaura = false
+local antifall = nil
+--
+
+-- idk if making it all in one loop is good or bad for performance
+RunService.Heartbeat:Connect(function(idk)
+
+    local character = localplayer.Character
+    local rootpart = character.HumanoidRootPart
+
+    ragdolled = character.Ragdolled.value
+    --anti slap
+    if ragdolled and antihit then
+        rootpart.Anchored = true
+        rootpart.Velocity = Vector3.new(0, 0, 0)
+    else
+        rootpart.Anchored = false
+    end
+    --
+end)
+--
+
+mainmenu:label("This is meant to be used against hackers")
+mainmenu:label("Made by me (Healer)")
+mainmenu:label("Enjoy the script!")
+
+debug:label("TestLabel")
+
+debug:button("Print local position",function()
+    print(rootpart.CFrame)
+end)
+
+debug:button("Test Button",function()
+    print("Button Pressed")
+end)
+
+debug:toggle("Test Toggle2",false,function(v)
+    print(v)   
+end)
+
+debug:input("Message","Type Here...",true,function(v)
+    print(v)    
+end)
+
+charactercat:toggle("Anti knockback V1",false,function(v)
+    antihit = v
+end)
+
+charactercat:toggle("Hide nametag",false,function(v)
+local character = localplayer.Character
+    if v then
+        character.Head.Nametag.Labels.TopLabel.Text = "Unnamed broda"
+    else
+        character.Head.Nametag.Labels.TopLabel.Text = character.Name
+    end
+end)
+
+world:toggle("Anti void",false,function(v)
+    if v == true then
+        local part = Instance.new("Part", workspace)
+        part.Transparency = 0.5
+        part.Anchored = true
+        part.Size = Vector3.new(350, 1.0, 350)
+        part.CFrame = CFrame.new(Vector3.new(0, -12, 0))
+        antifall = part
+    end
+    if v == false then
+        antifall:Destroy()
+    end
+end)
